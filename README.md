@@ -1,10 +1,6 @@
-# ClinicalHWE
-An app for running and interpreting HWE on clinical variants
-Sure! Here's a detailed README file for your GitHub repository:
+# Clinical Hardy-Weinberg Equilibrium (HWE) Analysis App
 
-# Hardy-Weinberg Equilibrium (HWE) Analysis App
-
-This Streamlit application allows you to perform Hardy-Weinberg Equilibrium (HWE) analysis with advanced features including:
+This Streamlit application allows you to perform Hardy-Weinberg Equilibrium (HWE) analysis on variants from clinical genetics with advanced features including:
 - Allele Frequency Evolution Simulation
 - Statistical Power Analysis
 - Advanced Statistical Tests
