@@ -71,6 +71,75 @@ def fetch_variant_info(variant):
     else:
         return None
 
+if page == "Advanced Statistical Tests":
+    st.header("Advanced Statistical Tests")
+    
+    # Explanation of HWE Expected Calculation
+    st.write("""
+    ### How Expected Genotype Frequencies are Calculated
+    Under Hardy-Weinberg Equilibrium (HWE), the expected genotype frequencies are calculated using the allele frequencies.
+    If p is the frequency of the major allele and q is the frequency of the minor allele (where p + q = 1), then:
+    - Expected frequency of homozygous major (AA) = p^2
+    - Expected frequency of heterozygous (Aa) = 2pq
+    - Expected frequency of homozygous minor (aa) = q^2
+    
+    These frequencies are then multiplied by the total number of individuals to get the expected genotype counts.
+    """)
+
+    # User inputs
+    st.write("### Enter the observed genotype counts:")
+    homozygous_variant = st.number_input("Homozygous Variant", 1, 100000, 1)
+    heterozygous = st.number_input("Heterozygous", 1, 100000, 1)
+    homozygous_reference = st.number_input("Homozygous Reference", 1, 100000, 1)
+    
+    obs = [homozygous_variant, heterozygous, homozygous_reference]
+    exp = hwe_expected(*obs)
+    
+    # Display observed and expected counts
+    st.write("### Observed and Expected Genotype Counts")
+    results_df = pd.DataFrame({
+        'Genotype': ['Homozygous Variant', 'Heterozygous', 'Homozygous Reference'],
+        'Observed': obs,
+        'Expected': exp
+    })
+    
+    st.table(results_df)
+    
+    # Plot observed and expected counts
+    st.write("### Observed vs. Expected Genotype Counts")
+    fig, ax = plt.subplots()
+    bar_width = 0.35
+    index = np.arange(3)
+    
+    bar1 = ax.bar(index, obs, bar_width, label='Observed')
+    bar2 = ax.bar(index + bar_width, exp, bar_width, label='Expected')
+    
+    ax.set_xlabel('Genotype')
+    ax.set_ylabel('Count')
+    ax.set_title('Observed vs. Expected Genotype Counts')
+    ax.set_xticks(index + bar_width / 2)
+    ax.set_xticklabels(['Homozygous Variant', 'Heterozygous', 'Homozygous Reference'])
+    ax.legend()
+    
+    st.pyplot(fig)
+    
+    try:
+        # Perform HWE chi-square test
+        chi2, p_value = chisquare(obs, exp)
+        st.write(f"### HWE Chi-Square Test")
+        st.write(f"Chi-Square Statistic: {chi2:.4f}")
+        st.write(f"P-Value: {p_value:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during HWE chi-square test: {e}")
+    
+    try:
+        # Perform exact test
+        if st.button("Perform Exact Test"):
+            p_value_exact = exact_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
+            st.write(f"### Exact Test P-Value: {p_value_exact:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during exact test: {e}")
+
 if page == "Allele Frequency Evolution":
     st.header("Allele Frequency Evolution Simulation")
     
@@ -125,42 +194,6 @@ if page == "Statistical Power Analysis":
         plt.title("Power Analysis Curve")
         plt.legend()
         st.pyplot(plt)
-
-if page == "Advanced Statistical Tests":
-    st.header("Advanced Statistical Tests")
-    
-    # User inputs
-    st.write("Enter the observed genotype counts:")
-    homozygous_variant = st.number_input("Homozygous Variant", 1, 100000, 1)
-    heterozygous = st.number_input("Heterozygous", 1, 100000, 1)
-    homozygous_reference = st.number_input("Homozygous Reference", 1, 100000, 1)
-    
-    obs = [homozygous_variant, heterozygous, homozygous_reference]
-    exp = hwe_expected(*obs)
-    
-    try:
-        # Perform HWE chi-square test
-        chi2, p_value = chisquare(obs, exp)
-        st.write(f"HWE Chi-Square Test: chi2 = {chi2:.4f}, p-value = {p_value:.4f}")
-    except Exception as e:
-        st.write(f"An error occurred during HWE chi-square test: {e}")
-    
-    try:
-        # Perform exact test
-        if st.button("Perform Exact Test"):
-            p_value_exact = exact_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
-            st.write(f"Exact Test P-Value: {p_value_exact:.4f}")
-    except Exception as e:
-        st.write(f"An error occurred during exact test: {e}")
-    
-    try:
-        # Perform chi-square test for multiple alleles
-        if st.button("Perform Chi-Square Test"):
-            chi2_mult, p_value_mult = chi_square_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
-            st.write(f"Chi-Square Statistic: {chi2_mult:.4f}")
-            st.write(f"Chi-Square Test P-Value: {p_value_mult:.4f}")
-    except Exception as e:
-        st.write(f"An error occurred during chi-square test for multiple alleles: {e}")
 
 if page == "Clinical Interpretation":
     st.header("Clinical Interpretation of HWE Deviations")
