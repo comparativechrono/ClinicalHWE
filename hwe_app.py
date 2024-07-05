@@ -29,11 +29,17 @@ if page == "Home":
 # Function to calculate expected counts under HWE
 def hwe_expected(obs_hom_var, obs_het, obs_hom_ref):
     total = obs_hom_var + obs_het + obs_hom_ref
-    p = (2*obs_hom_var + obs_het) / (2*total)
-    q = 1 - p
-    exp_hom_var = p**2 * total
+    total_alleles = 2 * total
+    
+    num_a_alleles = 2 * obs_hom_var + obs_het
+    num_A_alleles = 2 * obs_hom_ref + obs_het
+    
+    q = num_a_alleles / total_alleles
+    p = num_A_alleles / total_alleles
+    
+    exp_hom_var = (q**2) * total
     exp_het = 2 * p * q * total
-    exp_hom_ref = q**2 * total
+    exp_hom_ref = (p**2) * total
     return exp_hom_var, exp_het, exp_hom_ref
 
 # Function for allele frequency simulation
