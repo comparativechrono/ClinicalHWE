@@ -98,8 +98,7 @@ Special thanks to the contributors and the open-source community for their valua
 
 ---
 
-For any queries or support, please contact [your-email@example.com](mailto:your-email@example.com).
+For any queries or support, please contact [tjh70@cam.ac.uk](mailto:tjh70@cam.ac.uk).
 
 ```
-
-Replace `your-username` and `your-email@example.com` with your actual GitHub username and email address. This README provides a comprehensive guide for users to understand, install, and use the HWE Analysis App.
+.
