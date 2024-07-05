@@ -7,13 +7,6 @@ import requests
 
 # Title and introduction
 st.title("Hardy-Weinberg Equilibrium Analysis App for Clinical Genetics")
-st.write("""
-This app allows you to perform Hardy-Weinberg Equilibrium (HWE) analysis with advanced features including:
-- Allele Frequency Evolution Simulation
-- Statistical Power Analysis
-- Advanced Statistical Tests
-- Clinical Interpretation of HWE Deviations
-""")
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
@@ -23,7 +16,14 @@ page = st.sidebar.radio("Go to", ["Home", "Allele Frequency Evolution", "Statist
 if page == "Home":
     st.header("Welcome to the HWE Analysis App")
     st.write("Use the navigation on the left to access different features.")
-
+    st.write("""
+    This app allows you to perform Hardy-Weinberg Equilibrium (HWE) analysis with advanced features including:
+    - Allele Frequency Evolution Simulation
+    - Statistical Power Analysis
+    - Advanced Statistical Tests
+    - Clinical Interpretation of HWE Deviations
+    """)
+    
 # Function to calculate expected counts under HWE
 def hwe_expected(obs_hom_var, obs_het, obs_hom_ref):
     total = obs_hom_var + obs_het + obs_hom_ref
@@ -131,27 +131,36 @@ if page == "Advanced Statistical Tests":
     
     # User inputs
     st.write("Enter the observed genotype counts:")
-    homozygous_variant = st.number_input("Homozygous Variant", 0, 100000, 0)
-    heterozygous = st.number_input("Heterozygous", 0, 100000, 0)
-    homozygous_reference = st.number_input("Homozygous Reference", 0, 100000, 0)
+    homozygous_variant = st.number_input("Homozygous Variant", 1, 100000, 1)
+    heterozygous = st.number_input("Heterozygous", 1, 100000, 1)
+    homozygous_reference = st.number_input("Homozygous Reference", 1, 100000, 1)
     
     obs = [homozygous_variant, heterozygous, homozygous_reference]
     exp = hwe_expected(*obs)
     
-    # Perform HWE chi-square test
-    chi2, p_value = chisquare(obs, exp)
-    st.write(f"HWE Chi-Square Test: chi2 = {chi2:.4f}, p-value = {p_value:.4f}")
+    try:
+        # Perform HWE chi-square test
+        chi2, p_value = chisquare(obs, exp)
+        st.write(f"HWE Chi-Square Test: chi2 = {chi2:.4f}, p-value = {p_value:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during HWE chi-square test: {e}")
     
-    # Perform exact test
-    if st.button("Perform Exact Test"):
-        p_value_exact = exact_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
-        st.write(f"Exact Test P-Value: {p_value_exact:.4f}")
+    try:
+        # Perform exact test
+        if st.button("Perform Exact Test"):
+            p_value_exact = exact_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
+            st.write(f"Exact Test P-Value: {p_value_exact:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during exact test: {e}")
     
-    # Perform chi-square test for multiple alleles
-    if st.button("Perform Chi-Square Test"):
-        chi2_mult, p_value_mult = chi_square_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
-        st.write(f"Chi-Square Statistic: {chi2_mult:.4f}")
-        st.write(f"Chi-Square Test P-Value: {p_value_mult:.4f}")
+    try:
+        # Perform chi-square test for multiple alleles
+        if st.button("Perform Chi-Square Test"):
+            chi2_mult, p_value_mult = chi_square_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
+            st.write(f"Chi-Square Statistic: {chi2_mult:.4f}")
+            st.write(f"Chi-Square Test P-Value: {p_value_mult:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during chi-square test for multiple alleles: {e}")
 
 if page == "Clinical Interpretation":
     st.header("Clinical Interpretation of HWE Deviations")
