@@ -4,5 +4,5 @@ matplotlib
 scipy
 statsmodels
 requests
-sklearn
+scikit-learn
 pandas
