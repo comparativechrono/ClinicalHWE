@@ -96,13 +96,18 @@ if page == "Advanced Statistical Tests":
 
     # User inputs
     st.write("### Enter the observed genotype counts:")
-    homozygous_variant = st.number_input("Homozygous Variant", 1, 100000, 1)
-    heterozygous = st.number_input("Heterozygous", 1, 100000, 1)
-    homozygous_reference = st.number_input("Homozygous Reference", 1, 100000, 1)
-    
+    homozygous_variant = st.number_input("Homozygous Variant", 1, 100000, 1, key="hom_var")
+    heterozygous = st.number_input("Heterozygous", 1, 100000, 1, key="het")
+    homozygous_reference = st.number_input("Homozygous Reference", 1, 100000, 1, key="hom_ref")
+
+    # Calculate expected counts
     obs = [homozygous_variant, heterozygous, homozygous_reference]
     exp = hwe_expected(*obs)
     
+    # Debug information
+    st.write(f"Total Individuals: {sum(obs)}")
+    st.write(f"Allele frequencies: p = {exp[2]**0.5}, q = {exp[0]**0.5}")
+
     # Display observed and expected counts
     st.write("### Observed and Expected Genotype Counts")
     results_df = pd.DataFrame({
