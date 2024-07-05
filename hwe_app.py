@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chisquare, fisher_exact, chi2_contingency
 from statsmodels.stats.power import GofChisquarePower
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
 import requests
 
 # Title and introduction
@@ -10,7 +12,7 @@ st.title("Hardy-Weinberg Equilibrium Analysis App for Clinical Genetics")
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "Allele Frequency Evolution", "Statistical Power Analysis", "Advanced Statistical Tests", "Clinical Interpretation"])
+page = st.sidebar.radio("Go to", ["Home", "Advanced Statistical Tests", "Allele Frequency Evolution", "Statistical Power Analysis", "Clinical Interpretation"])
 
 # Home Page
 if page == "Home":
