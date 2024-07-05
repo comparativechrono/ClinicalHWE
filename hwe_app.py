@@ -25,9 +25,6 @@ if page == "Home":
     - Advanced Statistical Tests
     - Clinical Interpretation of HWE Deviations
     """)
-
-if 'page' not in st.session_state:
-    st.session_state.page = "Home"
     
 # Function to calculate expected counts under HWE
 def hwe_expected(obs_hom_var, obs_het, obs_hom_ref):
@@ -82,7 +79,7 @@ def fetch_variant_info(variant):
     else:
         return None
 
-if st.session_state.page == "Advanced Statistical Tests":
+if page == "Advanced Statistical Tests":
     st.header("Advanced Statistical Tests")
     
     # Explanation of HWE Expected Calculation
