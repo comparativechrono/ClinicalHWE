@@ -79,7 +79,7 @@ def fetch_variant_info(variant):
     else:
         return None
 
-if page == "Advanced Statistical Tests":
+if st.session_state.page == "Advanced Statistical Tests":
     st.header("Advanced Statistical Tests")
     
     # Explanation of HWE Expected Calculation
