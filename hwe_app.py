@@ -190,6 +190,9 @@ if page == "Advanced Statistical Tests":
     try:
         # Perform Fisher's Exact Test for 2x3 table using Monte Carlo simulation
         if st.button("Perform Fisher's Exact Test for 2x3 Table using Monte Carlo simulation"):
+            # Convert counts to integers
+            obs = [int(x) for x in obs]
+            exp = [int(x) for x in exp]
             table = np.array([obs, exp])
             p_value_fisher = monte_carlo_fishers_exact(table)
             st.write(f"### Fisher's Exact Test for 2x3 Table using Monte Carlo Simulation")
