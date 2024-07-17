@@ -146,12 +146,16 @@ if page == "Advanced Statistical Tests":
         st.write(f"An error occurred during HWE chi-square test: {e}")
     
     try:
-        # Perform exact test
-        if st.button("Perform Exact Test"):
-            p_value_exact = exact_test([[homozygous_variant, heterozygous], [heterozygous, homozygous_reference]])
-            st.write(f"### Exact Test P-Value: {p_value_exact:.4f}")
+        # Perform Fisher's Exact Test for 2x3 table
+        if st.button("Perform Fisher's Exact Test for 2x3 Table"):
+            # Create the 2x3 contingency table
+            table = np.array([obs, exp])
+            fisher_test = Table(table).test_nominal_association()
+            p_value_fisher = fisher_test.pvalue
+            st.write(f"### Fisher's Exact Test for 2x3 Table")
+            st.write(f"P-Value: {p_value_fisher:.4f}")
     except Exception as e:
-        st.write(f"An error occurred during exact test: {e}")
+        st.write(f"An error occurred during Fisher's Exact Test for 2x3 Table: {e}")
 
 if page == "Allele Frequency Evolution":
     st.header("Allele Frequency Evolution Simulation")
