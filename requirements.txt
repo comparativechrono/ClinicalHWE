@@ -6,3 +6,4 @@ statsmodels
 requests
 scikit-learn
 pandas
+itertools
