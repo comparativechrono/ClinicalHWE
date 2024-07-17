@@ -5,6 +5,7 @@ from scipy.stats import chisquare, fisher_exact, chi2_contingency
 from statsmodels.stats.power import GofChisquarePower
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
+from itertools import combinations
 import requests
 
 # Title and introduction
@@ -78,6 +79,34 @@ def fetch_variant_info(variant):
         return response.json()
     else:
         return None
+
+# Monte Carlo simulation for Fisher's exact test on a 2x3 table
+def monte_carlo_fishers_exact(table, num_simulations=10000):
+    obs = table.sum(axis=0)
+    n = table.sum()
+    count = 0
+    for _ in range(num_simulations):
+        shuffled = np.random.choice(obs, size=n, replace=True)
+        simulated_table = np.array([
+            [shuffled[0], shuffled[1], shuffled[2]],
+            [shuffled[3], shuffled[4], shuffled[5]]
+        ])
+        if fisher_exact(simulated_table, alternative='two-sided')[1] >= fisher_exact(table, alternative='two-sided')[1]:
+            count += 1
+    return count / num_simulations
+
+# Permutation test for a 2x3 table
+def permutation_test(table, num_permutations=10000):
+    observed_stat, _, _, _ = chi2_contingency(table)
+    count = 0
+    combined = table.flatten()
+    for _ in range(num_permutations):
+        np.random.shuffle(combined)
+        permuted_table = combined.reshape(table.shape)
+        permuted_stat, _, _, _ = chi2_contingency(permuted_table)
+        if permuted_stat >= observed_stat:
+            count += 1
+    return count / num_permutations
 
 if page == "Advanced Statistical Tests":
     st.header("Advanced Statistical Tests")
@@ -156,6 +185,26 @@ if page == "Advanced Statistical Tests":
             st.write(f"P-Value: {p_value_fisher:.4f}")
     except Exception as e:
         st.write(f"An error occurred during Fisher's Exact Test for 2x3 Table: {e}")
+
+  try:
+        # Perform Fisher's Exact Test for 2x3 table using Monte Carlo simulation
+        if st.button("Perform Fisher's Exact Test for 2x3 Table"):
+            table = np.array([obs, exp])
+            p_value_fisher = monte_carlo_fishers_exact(table)
+            st.write(f"### Fisher's Exact Test for 2x3 Table using Monte Carlo Simulation")
+            st.write(f"P-Value: {p_value_fisher:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during Fisher's Exact Test for 2x3 Table: {e}")
+
+    try:
+        # Perform permutation test for 2x3 table
+        if st.button("Perform Permutation Test for 2x3 Table"):
+            table = np.array([obs, exp])
+            p_value_perm = permutation_test(table)
+            st.write(f"### Permutation Test for 2x3 Table")
+            st.write(f"P-Value: {p_value_perm:.4f}")
+    except Exception as e:
+        st.write(f"An error occurred during Permutation Test for 2x3 Table: {e}")
 
 if page == "Allele Frequency Evolution":
     st.header("Allele Frequency Evolution Simulation")
