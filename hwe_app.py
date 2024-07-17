@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import chisquare, fisher_exact, chi2_contingency
 from statsmodels.stats.power import GofChisquarePower
+from statsmodels.stats.contingency_tables import Table
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 from itertools import combinations
@@ -188,7 +189,7 @@ if page == "Advanced Statistical Tests":
 
     try:
         # Perform Fisher's Exact Test for 2x3 table using Monte Carlo simulation
-        if st.button("Perform Fisher's Exact Test for 2x3 Table"):
+        if st.button("Perform Fisher's Exact Test for 2x3 Table using Monte Carlo simulation"):
             table = np.array([obs, exp])
             p_value_fisher = monte_carlo_fishers_exact(table)
             st.write(f"### Fisher's Exact Test for 2x3 Table using Monte Carlo Simulation")
