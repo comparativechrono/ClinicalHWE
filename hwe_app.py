@@ -192,7 +192,7 @@ if page == "Advanced Statistical Tests":
             chi2_quantiles = chi2.ppf(quantiles, df=2)
             ax.scatter(chi2_quantiles, permuted_stats, alpha=0.5, label='Permuted Statistics')
             ax.plot(chi2_quantiles, chi2_quantiles, 'r--', label='Expected')
-            ax.axhline(observed_stat, color='blue', linestyle='dashed', linewidth=2, label='Observed Statistic')
+            ax.axvline(observed_stat, color='blue', linestyle='dashed', linewidth=2, label='Observed Statistic')
             ax.set_xlabel('Theoretical Quantiles')
             ax.set_ylabel('Sample Quantiles')
             ax.set_title('Q-Q Plot for Permutation Test')
