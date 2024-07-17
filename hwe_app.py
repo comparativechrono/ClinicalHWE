@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import chisquare, fisher_exact, chi2_contingency
+from scipy.stats import chisquare, fisher_exact, chi2_contingency, chi2
 from statsmodels.stats.power import GofChisquarePower
 from statsmodels.stats.contingency_tables import Table
 from sklearn.linear_model import LogisticRegression
@@ -180,6 +180,20 @@ if page == "Advanced Statistical Tests":
             ax.set_xlabel('Chi-Square Statistic')
             ax.set_ylabel('Frequency')
             ax.set_title('Permutation Test Distribution')
+            ax.legend()
+            st.pyplot(fig)
+
+            # Q-Q Plot for permutation test
+            st.write("### Q-Q Plot for Permutation Test")
+            fig, ax = plt.subplots()
+            chi2_q = np.quantile(permuted_stats, np.linspace(0, 1, len(permuted_stats)))
+            theor_q = chi2.ppf(np.linspace(0, 1, len(permuted_stats)), df=2)
+            ax.scatter(theor_q, chi2_q, alpha=0.5, label='Permutation Test Statistics')
+            ax.plot(theor_q, theor_q, 'r--', label='Expected')
+            ax.axvline(observed_stat, color='blue', linestyle='dashed', linewidth=2, label='Observed Statistic')
+            ax.set_xlabel('Theoretical Quantiles')
+            ax.set_ylabel('Sample Quantiles')
+            ax.set_title('Q-Q Plot for Permutation Test')
             ax.legend()
             st.pyplot(fig)
             
