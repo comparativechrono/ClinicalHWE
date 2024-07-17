@@ -186,7 +186,7 @@ if page == "Advanced Statistical Tests":
     except Exception as e:
         st.write(f"An error occurred during Fisher's Exact Test for 2x3 Table: {e}")
 
-  try:
+    try:
         # Perform Fisher's Exact Test for 2x3 table using Monte Carlo simulation
         if st.button("Perform Fisher's Exact Test for 2x3 Table"):
             table = np.array([obs, exp])
